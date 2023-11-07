@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Description: Automated setup of a machine to use personally preferred configs.
+# Description of the script
+description="Description: Automated setup of a machine to use preferred configs. Uses defaults provided from './Configs' and './Fonts', unless updated using their respective set scripts."
 
 # OPTS
 while [ $# -gt 0 ]; do
@@ -12,6 +13,7 @@ while [ $# -gt 0 ]; do
             setup_shell
             install_homebrew
             install_vscode
+            exit 0
             ;;
         -b | --brew)
             install_homebrew
@@ -32,6 +34,11 @@ while [ $# -gt 0 ]; do
         -v | --vscode)
             install_vscode
             ;;
+        *)
+            echo "Unrecognized option: $1"
+            show_help
+            exit 1
+            ;;
     esac
     shift
 done
@@ -39,10 +46,11 @@ done
 # FUNCTIONS
 # Displays help documentation
 show_help () {
+    echo "$description"
     echo "Usage: $0 [OPTIONS]"
     echo "Options:"
-    echo "  -a, --all       Sets up all config options listed below."
-    echo "  -b, --brew      Installs Homebrew, Casks & Formulae. Default Casks & Formulae are provided, or can be set separately using set_configs.sh."
+    echo "  -a, --all       Sets up all config options listed below. WARNING: Passing other options before this option is superfluous."
+    echo "  -b, --brew      Installs Homebrew, Casks & Formulae. Default Casks & Formulae are provided, or can be set separately using 'set_configs.sh'."
     echo "  -f, --fonts     Installs all custom fonts from './Fonts'. Can be updated separately using 'set_fonts.sh'."
     echo "  -g, --git       Reads user input to set '.gitconfig' user.name and user.email."
     echo "  -s, --shell     Downloads, installs, and sets up iTerm2, color preferences, Oh-My-Zsh, Agnoster theme, custom aliases, custom profile, and a few other useful tools. Requires fonts installed by '--fonts'."
