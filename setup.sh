@@ -50,7 +50,22 @@ else
     echo "File URL not found in the anchor tag."
 fi
 
-# TODO: Download and install custom font
+# Install custom fonts
+echo "Unpackaging and installing custom fonts"
+
+# Unzip fonts into the Fonts Library
+unzip -d ~/Library/Fonts "$script_dir"/Fonts/Fonts.zip
+
+# Check if Font Book is running and quit it
+if pgrep "Font Book" &>/dev/null; then
+    osascript -e 'tell application "Font Book" to quit'
+fi
+
+# Open Font Book to recognize the new font
+open -a "Font Book"
+
+echo "Fonts successfully installed"
+
 # TODO: Install color theme
 
 echo "Done"
