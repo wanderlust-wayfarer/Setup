@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # setup: Automated setup of a machine to use personally preferred configs.
 
 # Gather relative dir of script
@@ -14,9 +14,15 @@ for config in "${script_dir}/Configs"/*; do
 done
 
 # Setup Git Config
-echo "Setup git config"
+echo "Setting up git"
 
-git config --global user.name "Michael Pay" user.email "wanderlust.wayfarer@icloud.com"
+# Prompt the user to enter their name
+read -rp "Please enter your name: " name
+
+# Prompt the user to enter their email
+read -rp "Please enter your email: " email
+
+git config --global user.name \""$name"\" user.email \""$email"\"
 
 # Install iTerm2
 echo "Installing iTerm2"
