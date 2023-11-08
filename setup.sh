@@ -44,7 +44,6 @@ get_configs () {
 
 # Sets .gitconfig
 set_git_config () {
-    # Setup Git Config
     echo "Setting up git"
 
     # Prompt the user to enter their name
@@ -53,7 +52,8 @@ set_git_config () {
     # Prompt the user to enter their email
     read -rp "Please enter your email: " email
 
-    echo "CMD: git config --global user.name \""$name"\" user.email \""$email"\""
+    # Apply user inputs to .gitconfig
+    git config --global user.name \""$name"\" user.email \""$email"\"
 
     echo "Done"
 }
@@ -63,7 +63,7 @@ install_custom_fonts () {
     echo "Unpackaging and installing custom fonts"
 
     # Unzip fonts into the Fonts Library
-    unzip -d ~/Library/Fonts "$script_dir"/Fonts/Fonts.zip
+    unzip -d ~/Library/Fonts ./Fonts/fonts.zip
 
     # Check if Font Book is running and quit it
     if pgrep "Font Book" &>/dev/null; then
@@ -91,12 +91,14 @@ install_iterm2 () {
 
     # Collects and extracts URL from anchor tag for iTerm2's latest distribution
     iterm2_latest_url="https://iterm2.com/downloads/stable/latest"
-    iterm2_download_url=$(curl -s "$iterm2_latest_url" | grep -oP '<a[^>]+href="\K[^"]+' | head -n 1)
+    iterm2_download_url=$(curl -s "$iterm2_latest_url" | awk -F 'href="' '/<a/{print $2; exit}' | awk -F '"' '{print $1}')
+
+    echo "$iterm2_download_url"
 
     # Check if a file URL was found
     if [ -n "$iterm2_download_url" ]; then
         # Download the file
-        wget "$iterm2_download_url"
+        curl -O "$iterm2_download_url"
         
         # Extract the file if it's a ZIP, GZIP, or TAR archive
         if [[ "$iterm2_download_url" =~ \.zip$ ]]; then
@@ -112,11 +114,9 @@ install_iterm2 () {
         echo "File URL not found in the anchor tag."
     fi
 
+    open ./iTerm.app
+
     echo "Done"
-
-    install_iterm_color_themes
-
-    setup_shell_preferences
 }
 
 # TODO: Install color theme
@@ -209,10 +209,6 @@ while [ $# -gt 0 ]; do
             ;;
         -b | --brew)
             install_homebrew
-            ;;
-        -c | --configs)
-            get_configs
-            exit 0
             ;;
         -f | --fonts)
             install_custom_fonts
