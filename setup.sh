@@ -133,6 +133,9 @@ install_ohmyzsh () {
 
     echo "Setting up theme"
 
+    # shellcheck disable=SC2296
+    # Pulled directly from Oh-My-Zsh site
+    # TODO: Line may not work unless shell is restarted, so that Oh-My-Zsh can reset to /bin/zsh
     echo "${(F)AGNOSTER_PROMPT_SEGMENTS[@]}" | cat -n
     AGNOSTER_PROMPT_SEGMENTS=("prompt_git" "${AGNOSTER_PROMPT_SEGMENTS[@]}")
 

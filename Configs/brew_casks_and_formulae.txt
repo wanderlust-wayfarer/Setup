@@ -1,4 +1,14 @@
+autoconf
+ca-certificates
 gh
+libyaml
+m4
 nvm
+openssl@3
+pkg-config
+pyenv
+rbenv
+readline
+ruby-build
 shellcheck
 tree
