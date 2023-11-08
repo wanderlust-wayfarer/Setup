@@ -1,47 +1,7 @@
 #!/bin/bash
 
-# Description of the script
+# DESCRIPTION
 description="Description: Automated setup of a machine to use preferred configs. Uses defaults provided from './Configs' and './Fonts', unless updated using their respective set scripts."
-
-# OPTS
-while [ $# -gt 0 ]; do
-    case "$1" in
-        -a | --all)
-            get_configs
-            set_git_config
-            install_custom_fonts
-            setup_shell
-            install_homebrew
-            install_vscode
-            exit 0
-            ;;
-        -b | --brew)
-            install_homebrew
-            ;;
-        -f | --fonts)
-            install_custom_fonts
-            ;;
-        -g | --git)
-            set_git_config
-            ;;
-        -h | --help)
-            show_help
-            exit 0
-            ;;
-        -s | --shell)
-            setup_shell
-            ;;
-        -v | --vscode)
-            install_vscode
-            ;;
-        *)
-            echo "Unrecognized option: $1"
-            show_help
-            exit 1
-            ;;
-    esac
-    shift
-done
 
 # FUNCTIONS
 # Displays help documentation
@@ -57,19 +17,29 @@ show_help () {
     echo "  -v, --vscode    Downloads and installs VS Code, extensions, and configures its settings. Requires 'code' CLI (installed automatically with '--brew' and default configs)."
 }
 
+# Define a function to read lines from a file and populate an array
+read_lines_into_array() {
+    local file="$1"
+    local array_name="$2"
+    local line
+
+    # Clear the array to make sure it's empty
+    eval "$array_name=()"
+
+    while IFS= read -r line; do
+        eval "$array_name+=(\"\$line\")"
+    done < "$file"
+}
+
 # Gets configs set previously by the user.
 get_configs () {
-    # Gather relative dir of script
-    script_dir="$(dirname "$0")"
+    # VARS
+    brew_casks_and_formulae=()
+    vscode_extensions=()
 
-    # Set configs as reusable vars
-    for config in "${script_dir}/Configs"/*; do
-        if [ -f "$config" ]; then
-            config_basename="$(basename "$config")"
-            # Will not work on Mac, which does not have `mapfile` or `readarray`
-            mapfile -t config_basename < config
-        fi
-    done
+    # Populate arrays with values from configs
+    read_lines_into_array "./Configs/brew_casks_and_formulae.txt" brew_casks_and_formulae
+    read_lines_into_array "./Configs/vscode_extensions.txt" vscode_extensions
 }
 
 # Sets .gitconfig
@@ -185,20 +155,10 @@ install_homebrew () {
 
     echo "Installing Formulae & Casks"
 
-    # TODO: Replace with output from get_configs
-    brew_formulae=("gh" "nvm" "shellcheck" "tree")
-
-    for formulae in "${brew_formulae[@]}";
+    # TODO: multi-thread
+    for cask_or_formula in "${brew_casks_and_formulae[@]}";
     do
-        brew install "$formulae"
-    done
-
-    # TODO: Replace with output from get_configs
-    brew_casks=()
-
-    for cask in "${brew_casks[@]}";
-    do
-        brew install "$cask"
+        brew install "$cask_or_formula"
     done
 
     echo "Done"
@@ -213,14 +173,11 @@ install_vscode () {
     set_vscode_settings
 }
 
-
 # Install VSCode Extensions
 install_vscode_extensions () {
     echo "Installing VS Code extensions"
 
-    # TODO: Replace with Config
-    vscode_extensions=("AncientLord.nightowl-theme" "DavidAnson.vscode-markdownlint" "dbaeumer.vscode-eslint" "donjayamanne.githistory" "eamodio.gitlens" "esbenp.prettier-vscode" "firefox-devtools.vscode-firefox-debug" "hoovercj.vscode-power-mode" "ms-azuretools.vscode-docker" "ms-python.python" "ms-python.vscode-pylance" "ms-toolsai.jupyter" "ms-toolsai.jupyter-keymap" "ms-toolsai.jupyter-renderers" "ms-toolsai.vscode-jupyter-cell-tags" "ms-toolsai.vscode-jupyter-slideshow" "ms-vscode.cpptools" "rvest.vs-code-prettier-eslint" "sdras.night-owl" "vscode-icons-team.vscode-icons")
-
+    # TODO: multi-thread
     for extension in "${vscode_extensions[@]}";
     do
         code --install-extension "$extension"
@@ -234,3 +191,47 @@ set_vscode_settings () {
     echo "Adjusting VS Code settings"
     echo "Done"
 }
+
+# OPTS
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -a | --all)
+            get_configs
+            set_git_config
+            install_custom_fonts
+            setup_shell
+            install_homebrew
+            install_vscode
+            exit 0
+            ;;
+        -b | --brew)
+            install_homebrew
+            ;;
+        -c | --configs)
+            get_configs
+            exit 0
+            ;;
+        -f | --fonts)
+            install_custom_fonts
+            ;;
+        -g | --git)
+            set_git_config
+            ;;
+        -h | --help)
+            show_help
+            exit 0
+            ;;
+        -s | --shell)
+            setup_shell
+            ;;
+        -v | --vscode)
+            install_vscode
+            ;;
+        *)
+            echo "Unrecognized option: $1" >&2
+            show_help
+            exit 1
+            ;;
+    esac
+    shift
+done
