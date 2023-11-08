@@ -5,7 +5,7 @@ description="Description: Automated setup of a machine to use preferred configs.
 
 # FUNCTIONS
 # Displays help documentation
-show_help () {
+function show_help () {
     echo "$description"
     echo "Usage: $0 [OPTIONS]"
     echo "Options:"
@@ -17,8 +17,8 @@ show_help () {
     echo "  -v, --vscode    Downloads and installs VS Code, extensions, and configures its settings. Requires 'code' CLI (installed automatically with '--brew' and default configs)."
 }
 
-# Define a function to read lines from a file and populate an array
-read_lines_into_array() {
+# Read lines from a file and populate an array
+function read_lines_into_array() {
     local file="$1"
     local array_name="$2"
     local line
@@ -32,7 +32,7 @@ read_lines_into_array() {
 }
 
 # Gets configs set previously by the user.
-get_configs () {
+function get_configs () {
     # VARS
     brew_casks_and_formulae=()
     vscode_extensions=()
@@ -43,7 +43,7 @@ get_configs () {
 }
 
 # Sets .gitconfig
-set_git_config () {
+function set_git_config () {
     echo "Setting up git"
 
     # Prompt the user to enter their name
@@ -59,7 +59,7 @@ set_git_config () {
 }
 
 # Install all custom fonts
-install_custom_fonts () {
+function install_custom_fonts () {
     echo "Unpackaging and installing custom fonts"
 
     # Unzip fonts into the Fonts Library
@@ -77,7 +77,7 @@ install_custom_fonts () {
 }
 
 # Sets all shell preferences
-setup_shell () {
+function setup_shell () {
     install_iterm2
     install_iterm_color_themes
     install_ohmyzsh
@@ -85,7 +85,7 @@ setup_shell () {
 }
 
 # Downloads and installs the latest version of iTerm2
-install_iterm2 () {
+function install_iterm2 () {
     # Install iTerm2
     echo "Installing iTerm2"
 
@@ -120,13 +120,13 @@ install_iterm2 () {
 }
 
 # TODO: Install color theme
-install_iterm_color_themes () {
+function install_iterm_color_themes () {
     echo "Installing custom iTerm2 Color Themes"
     echo "Done"
 }
 
 # Install Oh-My-Zsh & set up themes
-install_ohmyzsh () {
+function install_ohmyzsh () {
     echo "Installing Oh-My-Zsh"
 
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -143,13 +143,13 @@ install_ohmyzsh () {
 }
 
 # TODO: Setup auto-complete shell integration & other custom features
-setup_shell_preferences () {
+function setup_shell_preferences () {
     echo "Setting up other useful shell features"
     echo "Done"
 }
 
 # Install Homebrew, Formulae, & Casks
-install_homebrew () {
+function install_homebrew () {
     echo "Installing Homebrew"
 
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -168,7 +168,7 @@ install_homebrew () {
 }
 
 # TODO: Download & Install VSCode
-install_vscode () {
+function install_vscode () {
     echo "Installing VS Code"
     echo "Done"
 
@@ -177,7 +177,7 @@ install_vscode () {
 }
 
 # Install VSCode Extensions
-install_vscode_extensions () {
+function install_vscode_extensions () {
     echo "Installing VS Code extensions"
 
     # TODO: multi-thread
@@ -190,12 +190,19 @@ install_vscode_extensions () {
 }
 
 # TODO: Setting VSCode Preferences JSON
-set_vscode_settings () {
+function set_vscode_settings () {
     echo "Adjusting VS Code settings"
     echo "Done"
 }
 
 # OPTS
+# Show help if no arguments
+if [ $# -eq 0 ]; then
+    show_help
+    exit
+fi
+
+# Process arguments
 while [ $# -gt 0 ]; do
     case "$1" in
         -a | --all)
