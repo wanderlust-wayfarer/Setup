@@ -9,7 +9,7 @@ function show_help () {
     echo "$description"
     echo "Usage: $0 [OPTIONS]"
     echo "Options:"
-    echo "  -a, --all       Sets up all config options listed below. WARNING: Passing other options before this option is superfluous."
+    echo "  -a, --all       Downloads and installs up all config options listed below. WARNING: Passing other options before this option is superfluous."
     echo "  -b, --brew      Installs Homebrew, Casks & Formulae. Default Casks & Formulae are provided, or can be set separately using 'set_configs.sh'."
     echo "  -f, --fonts     Installs all custom fonts from './Fonts'. Can be updated separately using 'set_fonts.sh'."
     echo "  -g, --git       Reads user input to set '.gitconfig' user.name and user.email."
@@ -119,9 +119,11 @@ function install_iterm2 () {
     echo "Done"
 }
 
-# TODO: Install color theme
+# Installs color theme
 function install_iterm_color_themes () {
     echo "Installing custom iTerm2 Color Themes"
+    cat ./iTermColors/CustomColorPresets.json
+    # plutil -p iTermColors/Lunar\ Winds.itermcolors | defaults write com.googlecode.iterm2 'Custom Color Presets' -dict "$(cat ./iTermColors/CustomColorPresets.json)"
     echo "Done"
 }
 
@@ -199,7 +201,7 @@ function set_vscode_settings () {
 # Show help if no arguments
 if [ $# -eq 0 ]; then
     show_help
-    exit
+    exit 1
 fi
 
 # Process arguments
