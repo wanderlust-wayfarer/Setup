@@ -26,6 +26,7 @@ function read_lines_into_array() {
     # Clear the array to make sure it's empty
     eval "$array_name=()"
 
+    # shellcheck disable=SC2034
     while IFS= read -r line; do
         eval "$array_name+=(\"\$line\")"
     done < "$file"
@@ -119,7 +120,7 @@ function install_iterm2 () {
     echo "Done"
 }
 
-# Installs color theme
+# TODO: Installs color theme
 function install_iterm_color_themes () {
     echo "Installing custom iTerm2 Color Themes"
     cat ./iTermColors/CustomColorPresets.json
@@ -130,16 +131,14 @@ function install_iterm_color_themes () {
 # Install Oh-My-Zsh & set up themes
 function install_ohmyzsh () {
     echo "Installing Oh-My-Zsh"
-
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-    echo "Setting up theme"
-
+    # echo "Setting up theme"
     # shellcheck disable=SC2296
     # Pulled directly from Oh-My-Zsh site
-    # TODO: Line may not work unless shell is restarted, so that Oh-My-Zsh can reset to /bin/zsh
-    echo "${(F)AGNOSTER_PROMPT_SEGMENTS[@]}" | cat -n
-    AGNOSTER_PROMPT_SEGMENTS=("prompt_git" "${AGNOSTER_PROMPT_SEGMENTS[@]}")
+    # TODO: Line does not work unless shell is restarted, so that Oh-My-Zsh can default to /bin/zsh
+    # echo "${(F)AGNOSTER_PROMPT_SEGMENTS[@]}" | cat -n
+    # AGNOSTER_PROMPT_SEGMENTS=("prompt_git" "${AGNOSTER_PROMPT_SEGMENTS[@]}")
 
     echo "Done"
 }
