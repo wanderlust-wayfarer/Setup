@@ -184,15 +184,22 @@ function install_vscode () {
     set_vscode_settings
 }
 
+# Process function for parallel extension installation
+function process_vscode_extension () {
+    local extension="$1"
+    code --install-extension "$extension"
+}
+
 # Install VSCode Extensions
 function install_vscode_extensions () {
     echo "Installing VS Code extensions"
 
-    # TODO: multi-thread
-    for extension in "${vscode_extensions[@]}";
-    do
-        code --install-extension "$extension"
+    for extension in "${vscode_extensions[@]}"; do
+        process_vscode_extension "$extension" &
     done
+
+    # Wait for all background processes to finish
+    wait
 
     echo "Done"
 }
