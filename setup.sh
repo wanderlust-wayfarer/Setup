@@ -80,9 +80,9 @@ function install_custom_fonts () {
 # Sets all shell preferences
 function setup_shell () {
     install_iterm2
-    install_iterm_color_themes
+    # install_iterm_color_themes
     install_ohmyzsh
-    setup_shell_preferences
+    setup_zsh_plugins
 }
 
 # Downloads and installs the latest version of iTerm2
@@ -120,11 +120,13 @@ function install_iterm2 () {
     echo "Done"
 }
 
-# TODO: Installs color theme
+# TODO: Installs color themes
+# Currently unable to find a filetype which writes successfully with `defaults write`
+# using the output provided from `defaults read`.
+# Formats attempted: JSON-like output directly from `defaults read`, xml, binary, JSON, dictionary reformatted via Python
 function install_iterm_color_themes () {
     echo "Installing custom iTerm2 Color Themes"
-    cat ./iTermColors/CustomColorPresets.json
-    # plutil -p iTermColors/Lunar\ Winds.itermcolors | defaults write com.googlecode.iterm2 'Custom Color Presets' -dict "$(cat ./iTermColors/CustomColorPresets.json)"
+    # defaults write com.googlecode.iterm2 'Custom Color Presets' -dict "$(cat ./iTermColors/CustomColorPresets.json)"
     echo "Done"
 }
 
@@ -133,19 +135,24 @@ function install_ohmyzsh () {
     echo "Installing Oh-My-Zsh"
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-    # echo "Setting up theme"
-    # shellcheck disable=SC2296
+    echo "Setting up theme"
     # Pulled directly from Oh-My-Zsh site
-    # TODO: Line does not work unless shell is restarted, so that Oh-My-Zsh can default to /bin/zsh
-    # echo "${(F)AGNOSTER_PROMPT_SEGMENTS[@]}" | cat -n
-    # AGNOSTER_PROMPT_SEGMENTS=("prompt_git" "${AGNOSTER_PROMPT_SEGMENTS[@]}")
+    # NEEDS TESTING
+    exec /bin/zsh -c '
+        echo "${(F)AGNOSTER_PROMPT_SEGMENTS[@]}" | cat -n
+        AGNOSTER_PROMPT_SEGMENTS=("prompt_git" "${AGNOSTER_PROMPT_SEGMENTS[@]}")
+    '
 
     echo "Done"
 }
 
-# TODO: Setup auto-complete shell integration & other custom features
-function setup_shell_preferences () {
+# Setup zsh plugins
+function setup_zsh_plugins () {
     echo "Setting up other useful shell features"
+
+    # zsh Syntax Highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
     echo "Done"
 }
 

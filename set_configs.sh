@@ -36,6 +36,7 @@ function set_vscode_extensions () {
 # Sets all Shell preferences
 function set_shell_preferences () {
     copy_zshrc
+    # copy_iterm2_custom_color_presets
 }
 
 # Copy .zsrhc
@@ -46,38 +47,41 @@ function copy_zshrc () {
 }
 
 # TODO: Copy iTerm2 Custom Color Presets
-# function copy_iterm2_custom_color_presets () {
-#     echo "Copying 'Custom Color Presets' plist..."
-#     defaults read com.googlecode.iterm2 'Custom Color Presets' > ./iTermColors/tmp.bin
+# Currently unable to find a filetype which writes successfully with `defaults write`
+# using the output provided from `defaults read`.
+# Formats attempted: JSON-like output directly from `defaults read`, xml, binary, JSON, dictionary reformatted via Python
+function copy_iterm2_custom_color_presets () {
+    echo "Copying 'Custom Color Presets' plist..."
+    defaults read com.googlecode.iterm2 'Custom Color Presets' > ./iTermColors/tmp.bin
     
-#     echo "Converting plist dictionary-ish to binary..."
-#     plutil -convert binary1 ./iTermColors/tmp.bin
+    echo "Converting plist dictionary-ish to binary..."
+    plutil -convert binary1 ./iTermColors/tmp.bin
 
-#     echo "Converting binary to dict..."
-#     python_version=$(python --version 2>&1)
-#     if [[ $python_version == *" 2."* ]]; then
-#         echo "Running Python 2"
-#         python -c "import plistlib; print(plistlib.readPlist('./iTermColors/tmp.bin'))" > ./iTermColors/customColorPresets.dict
-#     elif [[ $python_version == *" 3."* ]]; then
-#         echo "Running Python 3"
-#         python -c "import plistlib; print(plistlib.load(open('./iTermColors/tmp.bin', 'rb')))" > ./iTermColors/customColorPresets.dict
-#     else
-#         echo "Unknown Python version"
-#         exit 2
-#     fi
+    echo "Converting binary to dict..."
+    python_version=$(python --version 2>&1)
+    if [[ $python_version == *" 2."* ]]; then
+        echo "Running Python 2"
+        python -c "import plistlib; print(plistlib.readPlist('./iTermColors/tmp.bin'))" > ./iTermColors/customColorPresets.dict
+    elif [[ $python_version == *" 3."* ]]; then
+        echo "Running Python 3"
+        python -c "import plistlib; print(plistlib.load(open('./iTermColors/tmp.bin', 'rb')))" > ./iTermColors/customColorPresets.dict
+    else
+        echo "Unknown Python version"
+        exit 2
+    fi
 
-#     echo "Converting dict to defaults compatible JSON"
-#     jq . "$(sed "s/'/\"/g; s/, *$/ /" './iTermColors/customColorPresets.dict')" > ./iTermColors/customColorPresets.json
+    echo "Converting dict to defaults compatible JSON"
+    jq . "$(sed "s/'/\"/g; s/, *$/ /" './iTermColors/customColorPresets.dict')" > ./iTermColors/customColorPresets.json
 
-#     echo "Setting com.googlecode.iterm2 'Custom Color Presets'"
-#     defaults write com.googlecode.iterm2 'Custom Color Presets' -dict "$(cat ./iTermColors/customColorPresets.dict)"
+    echo "Setting com.googlecode.iterm2 'Custom Color Presets'"
+    defaults write com.googlecode.iterm2 'Custom Color Presets' -dict "$(cat ./iTermColors/customColorPresets.dict)"
     
 
-#     echo "Cleaning up directory..."
-#     rm ./iTermColors/tmp.bin
+    echo "Cleaning up directory..."
+    rm ./iTermColors/tmp.bin
 
-#     echo "Done"
-# }
+    echo "Done"
+}
 
 # OPTS
 # Show help if no arguments
