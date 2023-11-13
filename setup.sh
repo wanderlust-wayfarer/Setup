@@ -156,6 +156,12 @@ function setup_zsh_plugins () {
     echo "Done"
 }
 
+# Process function for parallel installations
+function process_casks_and_formulae () {
+    local cask_or_formula="$1"
+    brew install "$cask_or_formula"
+}
+
 # Install Homebrew, Formulae, & Casks
 function install_homebrew () {
     echo "Installing Homebrew"
@@ -163,14 +169,19 @@ function install_homebrew () {
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     echo "Done"
+}
 
+# Installs Homebrew Casks & Formulae
+function install_homebrew_casks_and_formulae () {
     echo "Installing Formulae & Casks"
 
-    # TODO: multi-thread
     for cask_or_formula in "${brew_casks_and_formulae[@]}";
     do
-        brew install "$cask_or_formula"
+        process_casks_and_formulae "$cask_or_formula" &
     done
+
+    # Wait for all background processes to finish
+    wait
 
     echo "Done"
 }
@@ -234,6 +245,7 @@ while [ $# -gt 0 ]; do
             ;;
         -b | --brew)
             install_homebrew
+            install_homebrew_casks_and_formulae
             ;;
         -f | --fonts)
             install_custom_fonts
