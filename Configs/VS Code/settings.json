@@ -1,0 +1,110 @@
+{
+  "terminal.integrated.fontFamily": "Source Code Pro for Powerline",
+  "workbench.preferredDarkColorTheme": "Solarized Dark",
+  "workbench.preferredLightColorTheme": "Monokai",
+  "editor.tabSize": 2,
+  "git.autofetch": true,
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "Iosevka",
+  // Specification of italics, bold, etc done below
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          // The following will be in italic
+          "comment",
+          "constant.language", // String, this, super
+          "keyword", // Import, export, return…
+          "variable.language",
+          "storage.modifier", // Static keyword
+          "storage.type.class.js" // Class keyword
+        ],
+        "settings": {
+          "fontStyle": "italic"
+        }
+      },
+      {
+        "scope": [
+          // The following will be bold
+          "invalid",
+          "keyword.other.unit.px.css",
+          "keyword.control",
+          "meta.path",
+          "entity.name.type.class", // Class names
+          "entity.name.function"
+        ],
+        "settings": {
+          "fontStyle": "bold"
+        }
+      },
+      {
+        "scope": [
+          // The following will be excluded from the above (overrides)
+          "keyword.operator"
+        ],
+        "settings": {
+          "fontStyle": ""
+        }
+      }
+    ]
+  },
+  "editor.wordWrap": "on",
+  "editor.fontSize": 14,
+  "window.autoDetectColorScheme": true,
+  // Powermode features (causes explosions while you type)
+  "powermode.enabled": true,
+  "powermode.maxExplosions": 10,
+  "powermode.combo.counterEnabled": "hide",
+  "powermode.combo.timerEnabled": "hide",
+  "powermode.shake.enabled": false,
+  "powermode.explosions.size": 12,
+  "powermode.explosions.frequency": 8,
+  "powermode.explosions.offset": 0.215,
+  "powermode.explosions.customExplosions": [
+    "https://media.giphy.com/media/xUA7aXJY46jN2P6gGk/giphy.gif",
+    "https://media.giphy.com/media/l0IykOPjEJopboxWw/giphy.gif",
+    "https://media.giphy.com/media/3o7btLYqcZhUb2GP16/giphy.gif"
+  ],
+  "powermode.explosions.backgroundMode": "mask",
+  "powermode.explosions.gifMode": "restart",
+  "powermode.explosions.explosionOrder": "sequential",
+  "powermode.explosions.duration": 1000,
+  "powermode.explosions.customCss": {
+    "mix-blend-mode": "color-dodge"
+  },
+  "redhat.telemetry.enabled": false,
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.statusBar.enabled": false,
+  "workbench.startupEditor": "none",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "explorer.confirmDelete": false,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "window.zoomLevel": 1,
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.singleQuote": true,
+  "eslint.lintTask.enable": true,
+  "eslint.format.enable": true,
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+  "workbench.colorTheme": "Solarized Dark",
+  "prettier.requireConfig": true,
+  "editor.formatOnSave": true,
+  "workbench.iconTheme": "vscode-icons"
+}

@@ -12,24 +12,17 @@ function show_help () {
     echo "Usage $0 [OPTIONS]"
     echo "Options:"
     echo "  -a, --all       Pulls all current configs for the options described below."
-    echo "  -b, --brew      Sets the internal config for Homebrew ('./Configs/brew_casks_and_formulae.txt') as a line separated array. Since brew installs Casks and Formulae with the same command, values are stored together to reduce complexity."
+    echo "  -b, --brew      Sets the internal config for Homebrew ('./Configs/Brew/brew_casks_and_formulae.txt') as a line separated array. Since brew installs Casks and Formulae with the same command, values are stored together to reduce complexity."
     echo "  -f, --fonts     Copies all fonts in the Fontbook to './Fonts' and compresses them."
     echo "  -s, --shell     TODO"
-    echo "  -v, --vscode    Collects all VS Code extensions, using 'code' CLI, and saves them to a line separated array file in './Configs/vscode_extensions.txt'"
+    echo "  -v, --vscode    Collects all VS Code extensions, using 'code' CLI, and saves them to a line separated array file in './Configs/VS\ Code/vscode_extensions.txt'"
 }
 
 # Collect Homebrew formulae & casks
 function set_homebrew_casks_and_formulae () {
     echo "Collecting Homebrew formulae & casks..."
-    brew list --formulae > ./Configs/brew_casks_and_formulae.txt
-    brew list --casks >> ./Configs/brew_casks_and_formulae.txt
-    echo "Done"
-}
-
-# Collect VS Code extensions
-function set_vscode_extensions () {
-    echo "Setting VS Code extensions"
-    code --list-extensions > ./Configs/vscode_extensions.txt
+    brew list --formulae > ./Configs/Brew/brew_casks_and_formulae.txt
+    brew list --casks >> ./Configs/Brew/brew_casks_and_formulae.txt
     echo "Done"
 }
 
@@ -42,7 +35,7 @@ function set_shell_preferences () {
 # Copy .zsrhc
 function copy_zshrc () {
     echo "Copying .zshrc from Home (~) directory"
-    cp ~/.zshrc ./Configs
+    cp ~/.zshrc ./Configs/Shell
     echo "Done"
 }
 
@@ -83,6 +76,20 @@ function copy_iterm2_custom_color_presets () {
     echo "Done"
 }
 
+# Collect VS Code extensions
+function set_vscode_extensions () {
+    echo "Setting VS Code extensions"
+    code --list-extensions > ./Configs/VS\ Code/vscode_extensions.txt
+    echo "Done"
+}
+
+# Copy VS Code settings.json
+function copy_vscode_settings () {
+    echo "Copying VS Code settings"
+    cp ~/Library/Application\ Support/Code/User/settings.json ./Configs/VS\ Code
+    echo "Done"
+}
+
 # OPTS
 # Show help if no arguments
 if [ $# -eq 0 ]; then
@@ -106,10 +113,11 @@ while [ $# -gt 0 ]; do
             exit 0
             ;;
         -s | --shell)
-            copy_iterm2_custom_color_presets
+            # copy_iterm2_custom_color_presets
             ;;
         -v | --vscode)
-            set_vscode_extensions
+            # set_vscode_extensions
+            copy_vscode_settings
     esac
     shift
 done

@@ -17,7 +17,7 @@ function show_help () {
     echo "  -v, --vscode    Downloads and installs VS Code, extensions, and configures its settings. Requires 'code' CLI (installed automatically with '--brew' and default configs)."
 }
 
-# Read lines from a file and populate an array
+# Read lines from a file and populate  arrays for brew casks, brew formulae, and vs code extensions
 function read_lines_into_array() {
     local file="$1"
     local array_name="$2"
@@ -39,8 +39,8 @@ function get_configs () {
     vscode_extensions=()
 
     # Populate arrays with values from configs
-    read_lines_into_array "./Configs/brew_casks_and_formulae.txt" brew_casks_and_formulae
-    read_lines_into_array "./Configs/vscode_extensions.txt" vscode_extensions
+    read_lines_into_array "./Configs/Brew/brew_casks_and_formulae.txt" brew_casks_and_formulae
+    read_lines_into_array "./Configs/VS\ Code/vscode_extensions.txt" vscode_extensions
 }
 
 # Sets .gitconfig
@@ -175,13 +175,15 @@ function install_homebrew () {
     echo "Done"
 }
 
-# TODO: Download & Install VSCode
+# Download & Install VS Code
+# Requires Homebrew
 function install_vscode () {
     echo "Installing VS Code"
-    echo "Done"
 
-    install_vscode_extensions
-    set_vscode_settings
+    brew tap homebrew/cask
+    brew install --cask visual-studio-code
+
+    echo "Done"
 }
 
 # Process function for parallel extension installation
@@ -204,9 +206,10 @@ function install_vscode_extensions () {
     echo "Done"
 }
 
-# TODO: Setting VSCode Preferences JSON
+# Setting VSCode Settings JSON
 function set_vscode_settings () {
-    echo "Adjusting VS Code settings"
+    echo "Copying VS Code settings"
+    cp ./Configs/VS\ Code/settings.json ~/Library/Application\ Support/Code/User/settings.json
     echo "Done"
 }
 
@@ -247,6 +250,8 @@ while [ $# -gt 0 ]; do
             ;;
         -v | --vscode)
             install_vscode
+            install_vscode_extensions
+            set_vscode_settings
             ;;
         *)
             echo "Unrecognized option: $1" >&2
