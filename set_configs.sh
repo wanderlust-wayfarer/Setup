@@ -19,7 +19,7 @@ function show_help () {
 }
 
 # Collect Homebrew formulae & casks
-function set_homebrew_casks_and_formulae () {
+function set_homebrew_casks_and_formulae_config () {
     echo "Collecting Homebrew formulae & casks..."
     brew list --formulae > ./Configs/Brew/brew_casks_and_formulae.txt
     brew list --casks >> ./Configs/Brew/brew_casks_and_formulae.txt
@@ -27,7 +27,7 @@ function set_homebrew_casks_and_formulae () {
 }
 
 # Sets all Shell preferences
-function set_shell_preferences () {
+function set_shell_configs () {
     copy_zshrc
     # copy_iterm2_custom_color_presets
 }
@@ -77,7 +77,7 @@ function copy_iterm2_custom_color_presets () {
 }
 
 # Collect VS Code extensions
-function set_vscode_extensions () {
+function set_vscode_extensions_config () {
     echo "Setting VS Code extensions"
     code --list-extensions > ./Configs/VS\ Code/vscode_extensions.txt
     echo "Done"
@@ -100,23 +100,23 @@ fi
 while [ $# -gt 0 ]; do
     case "$1" in
         -a | --all)
-            set_homebrew_casks_and_formulae
-            set_vscode_extensions
-            set_shell_preferences
+            set_homebrew_casks_and_formulae_config
+            set_vscode_extensions_config
+            set_shell_configs
             exit 0
             ;;
         -b | --brew)
-            set_homebrew_casks_and_formulae
+            set_homebrew_casks_and_formulae_config
             ;;
         -h | --help)
             show_help
             exit 0
             ;;
         -s | --shell)
-            # copy_iterm2_custom_color_presets
+            set_shell_configs
             ;;
         -v | --vscode)
-            # set_vscode_extensions
+            set_vscode_extensions_config
             copy_vscode_settings
     esac
     shift
