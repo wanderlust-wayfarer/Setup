@@ -90,7 +90,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[python]": {
-    "editor.formatOnType": true
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "ms-python.python"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -102,9 +103,12 @@
   "prettier.singleQuote": true,
   "eslint.lintTask.enable": true,
   "eslint.format.enable": true,
-  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "workbench.colorTheme": "Solarized Dark",
   "prettier.requireConfig": true,
   "editor.formatOnSave": true,
-  "workbench.iconTheme": "vscode-icons"
+  "workbench.iconTheme": "Monokai Pro (Filter Machine) Icons",
+  "css.lint.unknownAtRules": "ignore",
+  "svelte.enable-ts-plugin": true,
+  "editor.accessibilitySupport": "off"
 }
